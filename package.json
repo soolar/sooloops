@@ -1,8 +1,8 @@
 {
-  "name": "kol-js-starter",
-  "version": "1.0.0",
-  "description": "Example package for KoLmafia TypeScript scripts.",
-  "main": "KoLmafia/scripts/kol-js-starter/main-script-name.js",
+  "name": "sooloops",
+  "version": "0.0.1",
+  "description": "Personal looping script for soolar",
+  "main": "KoLmafia/scripts/sooloops/sooloops.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "yarn run build:types && yarn run build:js",
@@ -31,15 +31,13 @@
   },
   "dependencies": {
     "core-js": "^3.16.4",
-    "kolmafia": ">=1.2.0",
-    "libram": ">=0.3.0"
+    "garbage-collector": "https://github.com/Loathing-Associates-Scripting-Society/garbage-collector.git",
+    "kolmafia": "^2.1.3",
+    "libram": "^0.6.16"
   },
-  "author": "Captain Scotch",
+  "author": "soolar",
   "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/docrostov/kol-js-starter.git"
-  },
+  "repository": "git+https://github.com/soolar/sooloops.git",
   "keywords": [
     "KoLMafia",
     "JS",
@@ -48,5 +46,6 @@
   "bugs": {
     "url": "https://github.com/docrostov/kol-js-starter/issues"
   },
-  "homepage": "https://github.com/docrostov/kol-js-starter#readme"
+  "homepage": "https://github.com/docrostov/kol-js-starter#readme",
+  "private": true
 }
