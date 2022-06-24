@@ -1,6 +1,6 @@
-import { print, todayToString } from "kolmafia";
+import { print } from "kolmafia";
 import { get, set } from "libram";
-import { dayProp, legProp, stepProp } from "./constants";
+import { legProp, stepProp } from "./constants";
 import { Leg } from "./Leg";
 
 export class LegRunner {
@@ -9,13 +9,6 @@ export class LegRunner {
   }
 
   run(): void {
-    if (get(dayProp, "") !== todayToString()) {
-      print("Beginning sooloops for the day!", "blue");
-      set(stepProp, 0);
-      set(legProp, 0);
-      set(dayProp, todayToString());
-    }
-
     if (this.isLegDone(this.legs.length + 1)) {
       print("You're already done for today!", "blue");
     } else {
@@ -33,6 +26,7 @@ export class LegRunner {
   markLegDone(legNum: number): void {
     if (!this.isLegDone(legNum)) {
       set(legProp, legNum);
+      set(stepProp, 0);
     }
   }
 
