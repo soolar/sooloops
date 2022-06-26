@@ -283,6 +283,17 @@ export function main(): void {
           }
         }
       }),
+      new FuncStep("Wad Up", () => {
+        // Finish unlocking guild
+        visitUrl("guild.php?place=challenge");
+        visitUrl("guild.php?place=malus");
+        const powdersAndNuggies = $items`twinkly powder, hot powder, cold powder, spooky powder, stench powder, sleaze powder, twinkly nuggets, hot nuggets, cold nuggets, spooky nuggets, stench nuggets, sleaze nuggets`;
+        powdersAndNuggies
+          .filter((it) => itemAmount(it) >= 5)
+          .forEach((it) =>
+            visitUrl(`guild.php?action=malussmash&pwd&whichitem=${toInt(it)}&quantity=1&smashall=1`)
+          );
+      }),
       new CliStep("Inventory Cleanup", "ocd-cleanup"),
       new CliStep("Prep For Rollover", "soologout"),
     ]),
