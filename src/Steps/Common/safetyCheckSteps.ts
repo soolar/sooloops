@@ -1,5 +1,6 @@
-import { inCasual, myAdventures, myPath, pvpAttacksLeft } from "kolmafia";
+import { closetAmount, inCasual, myAdventures, myPath, pvpAttacksLeft } from "kolmafia";
 import { $location, get } from "libram";
+import { melfDupeItem } from "../../constants";
 import { AssertStep } from "../AssertStep";
 
 export const checkCS = new AssertStep(
@@ -22,8 +23,8 @@ export const checkRunFinished = new AssertStep(
 
 export const melfAssert = new AssertStep(
   "Melf Dupe Safety Check",
-  () => $location`The Deep Machine Tunnels`.turnsSpent === 5,
-  "You should have spent exactly 5 turns in The Deep Machine Tunnels, but you haven't. Something went wrong."
+  () => $location`The Deep Machine Tunnels`.turnsSpent === 5 && closetAmount(melfDupeItem) > 0,
+  `You should have spent exactly 5 turns in The Deep Machine Tunnels, but you haven't, or you are missing a(n) ${melfDupeItem}. Something went wrong.`
 );
 
 export const ensureNoAdvs = new AssertStep(
