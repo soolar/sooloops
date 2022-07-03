@@ -2,12 +2,19 @@ import { print } from "kolmafia";
 import { get, Session, set } from "libram";
 import { garboValue } from "garbage-collector/src/session";
 import { CliStep } from "./Steps/CliStep";
-import { itemProp, meatProp } from "./constants";
+import { itemProp, meatProp, voaSober } from "./constants";
 import { Leg } from "./Leg";
 import { LegRunner } from "./LegRunner";
 import { handleDayStart, propertyManager } from "./props";
 import { breakfast, pirateBellow } from "./Steps/Common/startupSteps";
-import { drunkGarboAscend, soberGarbo, soberGarboAscend } from "./Steps/Common/garboSteps";
+import {
+  drunkFarm,
+  drunkFarmAscend,
+  preSoberFarm,
+  preSoberFarmAscend,
+  soberFarm,
+  soberFarmAscend,
+} from "./Steps/Common/farmSteps";
 import {
   clockworkMaid,
   florestizeBarfMountain,
@@ -21,10 +28,10 @@ import {
 import {
   checkCasual,
   checkCS,
-  checkRunFinished,
   ensureNoAdvs,
   ensureNoFites,
   melfAssert,
+  softEnsureNoAdvs,
 } from "./Steps/Common/safetyCheckSteps";
 import {
   blackheart,
@@ -42,68 +49,118 @@ import {
   smashBarrels,
   wadify,
 } from "./Steps/Common/cleanupSteps";
+import { FuncStep } from "./Steps/FuncStep";
+import { checkCasualFinished, runCasual } from "./Steps/Common/casualSteps";
 
 export function main(): void {
   handleDayStart();
 
-  const session = Session.current();
+  let session = Session.current();
+  let sessionOutputted = false;
+
+  const outputSession = () => {
+    if (!sessionOutputted) {
+      const sessionDiff = Session.current().diff(session);
+      const results = sessionDiff.value(garboValue);
+
+      const garboMeat = get("garboResultsMeat", 0);
+      const garboItems = get("garboResultsItems", 0);
+      const garboTotal = garboMeat + garboItems;
+
+      const todayMeat = get(meatProp, 0) + results.meat;
+      const todayItems = get(itemProp, 0) + results.items;
+      const todayTotal = todayMeat + todayItems;
+
+      set(meatProp, todayMeat);
+      set(itemProp, todayItems);
+
+      const formatNum = (num: number) => num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+
+      print("Today's garbo earnings so far...");
+      print(`>  Meat: ${formatNum(garboMeat)}`);
+      print(`> Items: ${formatNum(garboItems)}`);
+      print(`> Total: ${formatNum(garboTotal)}`);
+      print("Today's overall earnings so far...");
+      print(`>  Meat: ${formatNum(todayMeat)}`);
+      print(`> Items: ${formatNum(todayItems)}`);
+      print(`> Total: ${formatNum(todayTotal)}`);
+
+      sessionOutputted = true;
+    }
+  };
+
+  const printSession = new FuncStep("Print Session Update", outputSession);
+
+  const resetSession = new FuncStep("Reset Session Tracker", () => {
+    session = Session.current();
+    sessionOutputted = false;
+  });
 
   const legRunner = new LegRunner([
     new Leg("Pre-Ascension", [
       breakfast,
       pirateBellow,
       shrugBallad,
-      soberGarboAscend,
-      ensureNoAdvs,
+      preSoberFarmAscend,
+      soberFarmAscend,
+      softEnsureNoAdvs,
       nightcapAscend,
       blackheart,
       grabFusedFuse,
-      drunkGarboAscend,
+      drunkFarmAscend,
       ensureNoAdvs,
       pvpPrep,
       runPvPFites,
       ensureNoFites,
+      refreshInv,
+      printSession,
       ascendCS,
     ]),
     new Leg("Community Service", [
       checkCS,
+      resetSession,
       new CliStep("PHCCS", "phccs"),
       visitOldMan,
       pullAll,
       openRainDoh,
       breakfast,
       pirateBellow,
-      soberGarboAscend,
-      ensureNoAdvs,
+      preSoberFarmAscend,
+      soberFarmAscend,
+      softEnsureNoAdvs,
       nightcapAscend,
       blackheart,
       melfAssert,
       melfDupe,
       grabFusedFuse,
-      drunkGarboAscend,
+      drunkFarmAscend,
       ensureNoAdvs,
+      printSession,
       ascendCasual,
     ]),
     new Leg("Casual", [
       checkCasual,
+      resetSession,
       smashHippyCrap,
       openRainDoh,
       visitGuildLeader,
       meatGolem,
       clockworkMaid,
-      new CliStep("Run Casual", "loopcasual"),
-      checkRunFinished,
+      runCasual,
+      checkCasualFinished,
       visitOldMan,
       breakfast,
       pirateBellow,
       florestizeBarfMountain,
-      soberGarbo,
-      ensureNoAdvs,
+      preSoberFarm,
+      soberFarm,
+      softEnsureNoAdvs,
       nightcap,
       blackheart,
-      grabFusedFuse,
       melfAssert,
       melfDupe,
+      grabFusedFuse,
+      drunkFarm,
       burnExcessFites,
       refreshInv,
       buyOneDayTickets,
@@ -111,37 +168,15 @@ export function main(): void {
       wadify,
       cleanupInventory,
       new CliStep("Prep For Rollover", "soologout"),
+      printSession,
     ]),
   ]);
 
   try {
+    propertyManager.set({ valueOfAdventure: voaSober });
     legRunner.run();
   } finally {
     propertyManager.resetAll();
-
-    const sessionDiff = Session.current().diff(session);
-    const results = sessionDiff.value(garboValue);
-
-    const garboMeat = get("garboResultsMeat", 0);
-    const garboItems = get("garboResultsItems", 0);
-    const garboTotal = garboMeat + garboItems;
-
-    const todayMeat = get(meatProp, 0) + results.meat;
-    const todayItems = get(itemProp, 0) + results.items;
-    const todayTotal = todayMeat + todayItems;
-
-    set(meatProp, todayMeat);
-    set(itemProp, todayItems);
-
-    const formatNum = (num: number) => num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-
-    print("Today's garbo earnings...");
-    print(`>  Meat: ${formatNum(garboMeat)}`);
-    print(`> Items: ${formatNum(garboItems)}`);
-    print(`> Total: ${formatNum(garboTotal)}`);
-    print("Today's overall earnings...");
-    print(`>  Meat: ${formatNum(todayMeat)}`);
-    print(`> Items: ${formatNum(todayItems)}`);
-    print(`> Total: ${formatNum(todayTotal)}`);
+    outputSession();
   }
 }

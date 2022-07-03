@@ -2,7 +2,6 @@ import {
   abort,
   adv1,
   availableAmount,
-  cliExecute,
   equip,
   itemAmount,
   putCloset,
@@ -15,14 +14,14 @@ import {
   visitUrl,
 } from "kolmafia";
 import { $familiar, $item, $location, $slot, get } from "libram";
-import { melfDupeItem, voaDrunk, voaSober } from "../../constants";
+import { isHalloween, melfDupeItem, voaDrunk, voaSober } from "../../constants";
 import { propertyManager } from "../../props";
-import { CliStep } from "../CliStep";
+import { CliStep, tryCliExecute } from "../CliStep";
 import { FuncStep } from "../FuncStep";
 
 export const nightcapAscend = new CliStep(
   "Nightcap To Run Drunk Turns",
-  `CONSUME NIGHTCAP VALUE ${voaDrunk}`
+  `CONSUME NIGHTCAP VALUE ${voaDrunk}${isHalloween ? " NOMEAT" : ""}`
 );
 
 export const nightcap = new CliStep("Nightcap", `CONSUME NIGHTCAP NOMEAT VALUE ${voaSober}`);
@@ -32,7 +31,7 @@ export const blackheart = new FuncStep("Blackheart", () => {
     equip($slot`off-hand`, $item`Drunkula's wineglass`);
     equip($slot`acc3`, $item`plastic vampire fangs`);
     visitUrl("place.php?whichplace=town&action=town_vampout");
-    cliExecute("choice-goal");
+    tryCliExecute("choice-goal");
   }
 });
 

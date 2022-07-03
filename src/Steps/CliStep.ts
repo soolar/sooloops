@@ -1,6 +1,12 @@
 import { cliExecute } from "kolmafia";
 import { Step } from "./Step";
 
+export const tryCliExecute = (command: string): void => {
+  if (!cliExecute(command)) {
+    throw `Something went wrong while running '${command}'`;
+  }
+};
+
 export class CliStep extends Step {
   constructor(name: string, command: string) {
     super(name);
@@ -8,9 +14,7 @@ export class CliStep extends Step {
   }
 
   stepBody(): void {
-    if (!cliExecute(this.command)) {
-      throw `Something went wrong while running '${this.command}'`;
-    }
+    tryCliExecute(this.command);
   }
 
   command: string;

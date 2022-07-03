@@ -1,6 +1,6 @@
-import { adv1, cliExecute, use, visitUrl } from "kolmafia";
+import { adv1, use, visitUrl } from "kolmafia";
 import { $item, $location } from "libram";
-import { CliStep } from "../CliStep";
+import { CliStep, tryCliExecute } from "../CliStep";
 import { FuncStep } from "../FuncStep";
 
 // This is necessary to get the sea jelly from the space jellyfish during breakfast
@@ -13,9 +13,9 @@ export const openRainDoh = new FuncStep("Open Rain-Doh", () => use(1, $item`can 
 
 export const florestizeBarfMountain = new FuncStep("Florestize Barf Mountain", () => {
   adv1($location`Barf Mountain`);
-  cliExecute("florist plant Stealing Magnolia");
-  cliExecute("florist plant Aloe Guv'nor");
-  cliExecute("florist plant Pitcher Plant");
+  tryCliExecute("florist plant Stealing Magnolia");
+  tryCliExecute("florist plant Aloe Guv'nor");
+  tryCliExecute("florist plant Pitcher Plant");
 });
 
 // Once in a while diet code somewhere fails to apply ode because it doesn't think to shrug this.
