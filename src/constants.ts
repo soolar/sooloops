@@ -22,4 +22,4 @@ export const voaGarbo = get("valueOfAdventure");
 export const voaSober = isHalloween ? voaHalloween : voaGarbo;
 export const voaDrunk = isHalloween ? voaHalloween : Math.round(voaSober * 0.6);
 
-export const melfDupeItem = $item`very fancy whiskey`;
+export const melfDupeItem = $item`bottle of Greedy Dog`;
