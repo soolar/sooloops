@@ -28,6 +28,7 @@ import {
 import {
   checkCasual,
   checkCS,
+  checkRunFinished,
   ensureNoAdvs,
   ensureNoFites,
   melfAssert,
@@ -120,6 +121,7 @@ export function main(): void {
       checkCS,
       resetSession,
       new CliStep("PHCCS", "phccs"),
+      checkRunFinished,
       visitOldMan,
       printSession,
       pullAll,
