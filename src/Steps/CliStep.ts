@@ -2,8 +2,16 @@ import { cliExecute } from "kolmafia";
 import { Step } from "./Step";
 
 export const tryCliExecute = (command: string): void => {
-  if (!cliExecute(command)) {
-    throw `Something went wrong while running '${command}'`;
+  try {
+    cliExecute(command);
+  }
+  catch (e: unknown) {
+    if (typeof(e) !== "string") {
+      throw `Something mysterious went wrong while running '${command}': ${e}`;
+    }
+    else if (e.indexOf("No matching CCS found!") < 0) {
+      throw `Something went wrong while running '${command}: ${e}`;
+    }
   }
 };
 
