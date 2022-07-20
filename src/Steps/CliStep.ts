@@ -9,7 +9,7 @@ export const tryCliExecute = (command: string): void => {
     if (typeof(e) !== "string") {
       abort(`Something mysterious went wrong while running '${command}': ${e}`);
     }
-    else if (e.indexOf("No matching CCS found!") < 0) {
+    else /*if (e.indexOf("No matching CCS found!") < 0)*/ {
       abort(`Something went wrong while running '${command}: ${e}`);
     }
   }
