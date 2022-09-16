@@ -10,7 +10,7 @@ export const stepProp = "_sooloopsStepsDone";
 export const meatProp = "sooloopsMeatValue";
 export const itemProp = "sooloopsItemValue";
 
-export const pvpStance = "ASCII";
+export const pvpStance = "Fahrenheit";
 export const pvpPrepCommand = "UberPvPOptimizer";
 
 export const isHalloween = visitUrl("place.php?whichplace=town&action=town_trickortreat").includes(
