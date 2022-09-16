@@ -1,11 +1,11 @@
-import { closetAmount, inCasual, myAdventures, myPath, pvpAttacksLeft } from "kolmafia";
+import { closetAmount, inCasual, myAdventures, myPath, Path, pvpAttacksLeft } from "kolmafia";
 import { $location, get } from "libram";
 import { isHalloween, melfDupeItem } from "../../constants";
 import { AssertStep } from "../AssertStep";
 
 export const checkCS = new AssertStep(
   "Check Community Service",
-  () => myPath() === "Community Service",
+  () => myPath() === Path.get('Community Service'),
   "You should be on a Community Service run right now, but you aren't."
 );
 

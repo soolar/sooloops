@@ -31,8 +31,7 @@
   },
   "dependencies": {
     "core-js": "^3.16.4",
-    "garbage-collector": "https://github.com/Loathing-Associates-Scripting-Society/garbage-collector.git",
-    "kolmafia": "^2.1.3",
+    "kolmafia": "^4.0.0-beta",
     "libram": "^0.6.16"
   },
   "author": "soolar",
