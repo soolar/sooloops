@@ -2,6 +2,7 @@ import {
   abort,
   adv1,
   availableAmount,
+  cliExecute,
   equip,
   itemAmount,
   putCloset,
@@ -18,6 +19,11 @@ import { isHalloween, melfDupeItem, voaDrunk, voaSober } from "../../constants";
 import { propertyManager } from "../../props";
 import { CliStep, tryCliExecute } from "../CliStep";
 import { FuncStep } from "../FuncStep";
+
+export const drinkSweat = new FuncStep("Drink Stillsuit Sweat", () => {
+  useFamiliar($familiar`Stooper`);
+  cliExecute('drink stillsuit distillate');
+});
 
 export const nightcapAscend = new CliStep(
   "Nightcap To Run Drunk Turns",

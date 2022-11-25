@@ -36,6 +36,7 @@ import {
 } from "./Steps/Common/safetyCheckSteps";
 import {
   blackheart,
+  drinkSweat,
   grabFusedFuse,
   melfDupe,
   nightcap,
@@ -105,6 +106,7 @@ export function main(): void {
       preSoberFarmAscend,
       soberFarmAscend,
       softEnsureNoAdvs,
+      drinkSweat,
       nightcapAscend,
       blackheart,
       grabFusedFuse,
@@ -132,6 +134,7 @@ export function main(): void {
       preSoberFarmAscend,
       soberFarmAscend,
       softEnsureNoAdvs,
+      drinkSweat,
       nightcapAscend,
       blackheart,
       melfAssert,
@@ -159,6 +162,7 @@ export function main(): void {
       preSoberFarm,
       soberFarm,
       softEnsureNoAdvs,
+      drinkSweat,
       nightcap,
       blackheart,
       melfAssert,
